@@ -2,10 +2,11 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>3D Racing Game</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { overflow: hidden; background: #000; font-family: 'Segoe UI', Arial, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; touch-action: none; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+        body { overflow: hidden; background: #000; font-family: 'Segoe UI', Arial, sans-serif; position: fixed; width: 100%; height: 100%; }
         canvas { display: block; }
         #hud { 
             position: fixed; 
@@ -215,9 +216,9 @@
             transform: scale(0.95);
         }
         /* 移动端适配 */
-        @media (max-width: 768px) {
+        @media (max-width: 768px), (pointer: coarse) {
             #mobile-controls {
-                display: flex;
+                display: flex !important;
             }
             #top-bar {
                 top: 10px;
@@ -803,6 +804,23 @@
         }
     });
 
+    // 阻止页面滚动和缩放
+    document.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+    }, { passive: false });
+    
+    document.addEventListener('gesturestart', (e) => {
+        e.preventDefault();
+    });
+    
+    document.addEventListener('gesturechange', (e) => {
+        e.preventDefault();
+    });
+    
+    document.addEventListener('gestureend', (e) => {
+        e.preventDefault();
+    });
+
     // 移动端触摸控制
     const leftBtn = document.getElementById('left-btn');
     const rightBtn = document.getElementById('right-btn');
@@ -846,7 +864,7 @@
 
     // ==================== RESIZE ====================
     window.addEventListener('resize', () => {
-        const newIsMobile = window.innerWidth <= 768;
+        const newIsMobile = window.innerWidth <= 768 || 'ontouchstart' in window;
         camera.fov = newIsMobile ? 75 : 60;
         camera.position.y = newIsMobile ? 5 : 4;
         camera.position.z = newIsMobile ? 18 : 15;
@@ -854,7 +872,21 @@
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
         composer.setSize(window.innerWidth, window.innerHeight);
+        
+        // 显示/隐藏移动端控制按钮
+        const mobileControls = document.getElementById('mobile-controls');
+        if (mobileControls) {
+            mobileControls.style.display = newIsMobile ? 'flex' : 'none';
+        }
     });
+    
+    // 初始检测移动端
+    if (window.innerWidth <= 768 || 'ontouchstart' in window) {
+        const mobileControls = document.getElementById('mobile-controls');
+        if (mobileControls) {
+            mobileControls.style.display = 'flex';
+        }
+    }
     </script>
 </body>
 </html>
