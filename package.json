@@ -1,0 +1,13 @@
+{
+  "name": "claw-toy-2",
+  "version": "1.0.0",
+  "description": "龙虾玩具2 - 一个更有趣的创意项目",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["toy", "claw", "lobster", "v2"],
+  "author": "cloud-prg",
+  "license": "MIT"
+}
