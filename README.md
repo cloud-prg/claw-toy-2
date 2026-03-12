@@ -1,73 +1,78 @@
-# React + TypeScript + Vite
+# 🏎️ 极速赛车 (Racing Game)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+一个基于 Three.js 的 3D 赛车躲避游戏。
 
-Currently, two official plugins are available:
+![Game Screenshot](./screenshot.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🎮 游戏玩法
 
-## React Compiler
+- **目标**：控制赛车躲避障碍物，坚持 60 秒
+- **操作**：
+  - `←` `→` 方向键 或 `A` `D` 键控制左右移动
+  - 躲避红色路障
+  - 收集金色金币 (+50 分)
+  - 成功躲避障碍物 (+10 分)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🚀 在线试玩
 
-## Expanding the ESLint configuration
+👉 [点击开始游戏](https://cloud-prg.github.io/claw-toy-2/)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠️ 本地运行
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+```bash
+# 克隆项目
+git clone https://github.com/cloud-prg/claw-toy-2.git
+cd claw-toy-2
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+# 启动本地服务器
+python3 -m http.server 8080
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# 浏览器打开
+open http://localhost:8080
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 📁 项目结构
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+claw-toy-2/
+├── index.html          # 主游戏文件
+├── game.html           # 完整版游戏
+├── README.md           # 项目说明
+├── package.json        # 项目配置
+└── src/                # 源代码目录
+    ├── App.tsx         # React 组件
+    ├── App.css         # 样式文件
+    └── index.js        # 入口文件
+```
+
+## 🎯 游戏特性
+
+- ✅ 3D 场景渲染 (Three.js)
+- ✅ 程序化生成的沥青路面纹理
+- ✅ 动态光照与阴影
+- ✅ 后期处理效果 (泛光)
+- ✅ 流畅的键盘控制
+- ✅ 计分系统
+- ✅ 倒计时机制
+
+## 📝 版本历史
+
+### v0.0.1 (2026-03-12)
+- 初始版本发布
+- 基础 3D 赛车游戏实现
+- 支持障碍物躲避和金币收集
+
+## 🔧 技术栈
+
+- [Three.js](https://threejs.org/) - 3D 图形库
+- [Vite](https://vitejs.dev/) - 构建工具
+- [React](https://react.dev/) - UI 框架
+- [TypeScript](https://www.typescriptlang.org/) - 类型安全
+
+## 📄 许可证
+
+MIT License
+
+---
+
+*Created with ❤️ by [cloud-prg](https://github.com/cloud-prg)*
