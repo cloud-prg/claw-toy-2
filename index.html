@@ -181,6 +181,60 @@
         .menu-btn.exit:hover {
             box-shadow: 0 6px 20px rgba(244, 67, 54, 0.5);
         }
+        /* 移动端控制按钮 */
+        #mobile-controls {
+            position: fixed;
+            bottom: 30px;
+            left: 0;
+            width: 100%;
+            display: none;
+            justify-content: space-between;
+            padding: 0 40px;
+            z-index: 30;
+            pointer-events: none;
+        }
+        .control-btn {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            color: white;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: auto;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            transition: all 0.1s ease;
+        }
+        .control-btn:active {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(0.95);
+        }
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            #mobile-controls {
+                display: flex;
+            }
+            #top-bar {
+                top: 10px;
+                gap: 15px;
+            }
+            #score-display, #time-display {
+                padding: 8px 15px;
+                font-size: 1rem;
+            }
+            #settings-btn {
+                top: 10px;
+                right: 10px;
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+        }
     </style>
     <script type="importmap">
     {
@@ -197,6 +251,11 @@
         <div id="time-display">Time: <span id="time">60</span>s</div>
     </div>
     <button id="settings-btn">⚙️</button>
+    
+    <div id="mobile-controls">
+        <div class="control-btn" id="left-btn">←</div>
+        <div class="control-btn" id="right-btn">→</div>
+    </div>
     
     <div id="game-overlay">
         <h1>🏎️ 3D 赛车游戏</h1>
@@ -258,8 +317,16 @@
     scene.background = new THREE.Color(CONSTANTS.COLORS.sky);
     scene.fog = new THREE.Fog(CONSTANTS.COLORS.sky, 20, 80);
 
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 4, 15);
+    // 检测是否为移动端
+    const isMobile = window.innerWidth <= 768;
+    
+    const camera = new THREE.PerspectiveCamera(
+        isMobile ? 75 : 60,  // 移动端更宽的视野
+        window.innerWidth / window.innerHeight, 
+        0.1, 
+        1000
+    );
+    camera.position.set(0, isMobile ? 5 : 4, isMobile ? 18 : 15);
     camera.lookAt(0, 0.5, 0);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -736,6 +803,34 @@
         }
     });
 
+    // 移动端触摸控制
+    const leftBtn = document.getElementById('left-btn');
+    const rightBtn = document.getElementById('right-btn');
+    
+    leftBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keys['ArrowLeft'] = true;
+    });
+    leftBtn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keys['ArrowLeft'] = false;
+    });
+    leftBtn.addEventListener('mousedown', () => keys['ArrowLeft'] = true);
+    leftBtn.addEventListener('mouseup', () => keys['ArrowLeft'] = false);
+    leftBtn.addEventListener('mouseleave', () => keys['ArrowLeft'] = false);
+    
+    rightBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keys['ArrowRight'] = true;
+    });
+    rightBtn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keys['ArrowRight'] = false;
+    });
+    rightBtn.addEventListener('mousedown', () => keys['ArrowRight'] = true);
+    rightBtn.addEventListener('mouseup', () => keys['ArrowRight'] = false);
+    rightBtn.addEventListener('mouseleave', () => keys['ArrowRight'] = false);
+
     // ==================== MAIN LOOP ====================
     const clock = new THREE.Clock();
 
@@ -751,6 +846,10 @@
 
     // ==================== RESIZE ====================
     window.addEventListener('resize', () => {
+        const newIsMobile = window.innerWidth <= 768;
+        camera.fov = newIsMobile ? 75 : 60;
+        camera.position.y = newIsMobile ? 5 : 4;
+        camera.position.z = newIsMobile ? 18 : 15;
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
